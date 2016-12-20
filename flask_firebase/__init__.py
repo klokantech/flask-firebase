@@ -41,7 +41,7 @@ class FirebaseAuth:
         'twitter': 'TwitterAuthProvider',
     }
 
-    def __init__(self, app=None, **kwargs):
+    def __init__(self, app=None):
         self.api_key = None
         self.project_id = None
         self.provider_ids = None
@@ -56,7 +56,7 @@ class FirebaseAuth:
         self.cached_at = 0
         self.lock = Lock()
         if app is not None:
-            self.init_app(app, **kwargs)
+            self.init_app(app)
 
     def init_app(self, app):
         app.extensions['firebase_auth'] = self
