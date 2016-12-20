@@ -12,8 +12,15 @@ system, accounts sign-in with a simple email form.
 - `FIREBASE_DEVELOPMENT`: `TRUE` or `FALSE` (default)
 - `FIREBASE_API_KEY`: The API key.
 - `FIREBASE_PROJECT_ID`: The project identifier, eg. `foobar`.
-- `FIREBASE_AUTH_SIGN_IN_OPTIONS`: Comma-separated list of enabled providers:
-  `email`, `facebook`, `github`, `google` or `twitter`.
+- `FIREBASE_AUTH_SIGN_IN_OPTIONS`: Comma-separated list of enabled providers.
+
+## Providers
+
+- `email`
+- `facebook`
+- `github`
+- `google`
+- `twitter`
 
 ## Sample code
 
