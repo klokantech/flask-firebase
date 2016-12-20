@@ -5,7 +5,7 @@ only the authentication subsystem is supported.
 
 The extension works in two modes: development and production.
 In development, there is no communication with the Firebase
-system. Accounts sign-in with a simple email form.
+system, accounts sign-in with a simple email form.
 
 ## Configuration
 
