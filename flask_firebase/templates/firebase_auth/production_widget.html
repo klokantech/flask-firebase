@@ -1,0 +1,41 @@
+<html>
+<head>
+<script src="https://www.gstatic.com/firebasejs/3.6.3/firebase.js"></script>
+<script src="https://www.gstatic.com/firebasejs/3.6.3/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/3.6.3/firebase-auth.js"></script>
+<script src="https://cdn.firebase.com/libs/firebaseui/1.0.0/firebaseui.js"></script>
+<link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/1.0.0/firebaseui.css" />
+<script>
+firebase.initializeApp({
+  apiKey: "{{ firebase_auth.api_key }}",
+  authDomain: "{{ firebase_auth.project_id }}.firebaseapp.com",
+  databaseURL: "https://{{ firebase_auth.project_id }}.firebaseio.com",
+  storageBucket: "{{ firebase_auth.project_id }}.appspot.com"
+});
+var ui = new firebaseui.auth.AuthUI(firebase.auth());
+ui.start("#firebaseui-auth-container", {
+  queryParameterForSignInSuccessUrl: "next",
+  signInOptions: [ {{ firebase_auth.provider_ids }} ],
+  callbacks: {
+    signInSuccess: function(user, credential, redirectUrl) {
+      user.getToken().then(function(token) {
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "{{ firebase_auth.url_for('sign_in') }}", true);
+        xhr.setRequestHeader("Content-Type", "application/jwt");
+        xhr.onreadystatechange = function() {
+          if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+            window.location.replace(redirectUrl || "{{ request.url_root }}");
+          }
+        };
+        xhr.send(token);
+      });
+      return false;
+    }
+  }
+});
+</script>
+</head>
+<body>
+<div id="firebaseui-auth-container"></div>
+</body>
+</html>
