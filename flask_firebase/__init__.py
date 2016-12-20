@@ -60,12 +60,12 @@ class FirebaseAuth:
 
     def init_app(self, app):
         app.extensions['firebase_auth'] = self
-        self.api_key = app.config['FIREBASE_API_KEY']
-        self.project_id = app.config['FIREBASE_PROJECT_ID']
-        self.server_name = app.config['SERVER_NAME']
         self.development = app.config.get('FIREBASE_DEVELOPMENT', False)
         if self.development:
             return
+        self.api_key = app.config['FIREBASE_API_KEY']
+        self.project_id = app.config['FIREBASE_PROJECT_ID']
+        self.server_name = app.config['SERVER_NAME']
         provider_ids = []
         for name in app.config['FIREBASE_AUTH_SIGN_IN_OPTIONS'].split(','):
             class_name = self.PROVIDER_CLASSES[name.strip()]
@@ -125,12 +125,12 @@ class FirebaseAuth:
 
     def sign_out(self):
         self.unload_callback()
-        return redirect(self.verify_redirection() or request.url_root)
+        return redirect(self.verify_redirection())
 
     def verify_redirection(self):
         next_ = request.args.get('next')
         if not next_:
-            return None
+            return request.url_root
         if self.server_name:
             url = urlparse(next_)
             if not url.netloc.endswith(self.server_name):
