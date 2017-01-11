@@ -5,11 +5,11 @@ only the authentication subsystem is supported.
 
 The extension works in two modes: development and production.
 In development, there is no communication with the Firebase
-system, accounts sign-in with a simple email form.
+system, accounts sign-in with a simple email form. The mode
+depends on the `Flask.debug` variable.
 
 ## Configuration
 
-- `FIREBASE_DEVELOPMENT`: `TRUE` or `FALSE` (default)
 - `FIREBASE_API_KEY`: The API key.
 - `FIREBASE_PROJECT_ID`: The project identifier, eg. `foobar`.
 - `FIREBASE_AUTH_SIGN_IN_OPTIONS`: Comma-separated list of enabled providers.

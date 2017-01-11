@@ -42,11 +42,11 @@ class FirebaseAuth:
     }
 
     def __init__(self, app=None):
+        self.debug = None
         self.api_key = None
         self.project_id = None
         self.provider_ids = None
         self.server_name = None
-        self.development = None
         self.production_load_callback = None
         self.development_load_callback = None
         self.unload_callback = None
@@ -60,8 +60,8 @@ class FirebaseAuth:
 
     def init_app(self, app):
         app.extensions['firebase_auth'] = self
-        self.development = app.config.get('FIREBASE_DEVELOPMENT', False)
-        if self.development:
+        self.debug = app.debug
+        if self.debug:
             return
         self.api_key = app.config['FIREBASE_API_KEY']
         self.project_id = app.config['FIREBASE_PROJECT_ID']
@@ -87,7 +87,7 @@ class FirebaseAuth:
 
     def url_for(self, endpoint, **values):
         full_endpoint = 'firebase_auth.{}'.format(endpoint)
-        if self.development:
+        if self.debug:
             return url_for(full_endpoint, **values)
         else:
             return url_for(
@@ -98,7 +98,7 @@ class FirebaseAuth:
 
     def widget(self):
         next_ = self.verify_redirection()
-        if self.development:
+        if self.debug:
             if request.method == 'POST':
                 self.development_load_callback(request.form['email'])
                 return redirect(next_)
@@ -110,7 +110,7 @@ class FirebaseAuth:
                 firebase_auth=self)
 
     def sign_in(self):
-        assert not self.development
+        assert not self.debug
         header = jwt.get_unverified_header(request.data)
         with self.lock:
             self.refresh_keys()
