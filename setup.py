@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='Flask-Firebase',
-    version='1.1',
+    version='1.2',
     description='Google Firebase integration for Flask',
     packages=['flask_firebase'],
     include_package_data=True,
