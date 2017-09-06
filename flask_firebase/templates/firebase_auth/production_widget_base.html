@@ -1,0 +1,47 @@
+<html>
+<head>
+<meta charset="utf-8"/>
+<script src="https://www.gstatic.com/firebasejs/4.3.0/firebase.js"></script>
+<script src="https://www.gstatic.com/firebasejs/4.3.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/4.3.0/firebase-auth.js"></script>
+<script src="https://cdn.firebase.com/libs/firebaseui/2.3.0/firebaseui.js"></script>
+{% block scripts %}{% endblock %}
+<link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/2.3.0/firebaseui.css" />
+{% block styles %}{% endblock %}
+<script>
+firebase.initializeApp({
+  apiKey: "{{ firebase_auth.api_key }}",
+  authDomain: "{{ firebase_auth.project_id }}.firebaseapp.com",
+  databaseURL: "https://{{ firebase_auth.project_id }}.firebaseio.com",
+  storageBucket: "{{ firebase_auth.project_id }}.appspot.com"
+});
+var ui = new firebaseui.auth.AuthUI(firebase.auth());
+ui.start("#firebaseui-auth-container", {
+  queryParameterForSignInSuccessUrl: "next",
+  signInOptions: [ {{ firebase_auth.provider_ids }} ],
+  callbacks: {
+    signInSuccess: function(user, credential, redirectUrl) {
+      user.getToken().then(function(token) {
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "{{ firebase_auth.url_for('sign_in') }}", true);
+        xhr.setRequestHeader("Content-Type", "application/jwt");
+        xhr.onreadystatechange = function() {
+          if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+            window.location.replace(redirectUrl || "{{ request.url_root }}");
+          }
+        };
+        xhr.send(token);
+      });
+      return false;
+    }
+  }
+});
+</script>
+</head>
+<body>
+{% block header %}{% endblock %}
+<div id="firebaseui-auth-container"></div>
+{# TODO: Default text explaining that you sign up by signing in. #}
+{% block footer %}{% endblock %}
+</body>
+</html>
