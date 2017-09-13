@@ -13,7 +13,8 @@ firebase.initializeApp({
   apiKey: "{{ firebase_auth.api_key }}",
   authDomain: "{{ firebase_auth.project_id }}.firebaseapp.com",
   databaseURL: "https://{{ firebase_auth.project_id }}.firebaseio.com",
-  storageBucket: "{{ firebase_auth.project_id }}.appspot.com"
+  storageBucket: "{{ firebase_auth.project_id }}.appspot.com",
+  projectId: "{{ firebase_auth.project_id }}"
 });
 var ui = new firebaseui.auth.AuthUI(firebase.auth());
 ui.start("#firebaseui-auth-container", {
