@@ -1,4 +1,6 @@
-v1.2, 2017-09-16 -- Update Firebase JS and CSS versions.
+v1.3, 2017-09-13 -- Update Firebase JS version.
+                    Add project ID to Firebase configuration.
+v1.2, 2017-09-06 -- Update Firebase JS and CSS versions.
                     Add production widget template base.
 v1.1, 2017-01-11 -- Use standard debug flag.
 v1.0, 2016-12-20 -- Initial release.
