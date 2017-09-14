@@ -61,9 +61,9 @@ class FirebaseAuth:
     def init_app(self, app):
         app.extensions['firebase_auth'] = self
         self.debug = app.debug
-        if self.debug:
+        self.api_key = app.config.get('FIREBASE_API_KEY')
+        if self.api_key is None:
             return
-        self.api_key = app.config['FIREBASE_API_KEY']
         self.project_id = app.config['FIREBASE_PROJECT_ID']
         self.server_name = app.config['SERVER_NAME']
         provider_ids = []
@@ -86,31 +86,20 @@ class FirebaseAuth:
         return callback
 
     def url_for(self, endpoint, **values):
-        full_endpoint = 'firebase_auth.{}'.format(endpoint)
-        if self.debug:
-            return url_for(full_endpoint, **values)
-        else:
-            return url_for(
-                full_endpoint,
-                _external=True,
-                _scheme='https',
-                **values)
+        return url_for(
+            'firebase_auth.{}'.format(endpoint),
+            _external=True,
+            _scheme='http' if self.debug else 'https',
+            **values)
 
     def widget(self):
         next_ = self.verify_redirection()
-        if self.debug:
-            if request.method == 'POST':
-                self.development_load_callback(request.form['email'])
-                return redirect(next_)
-            else:
-                return render_template('firebase_auth/development_widget.html')
-        else:
-            return render_template(
-                'firebase_auth/production_widget.html',
-                firebase_auth=self)
+        if self.debug and request.method == 'POST':
+            self.development_load_callback(request.form['email'])
+            return redirect(next_)
+        return render_template('firebase_auth/widget.html', firebase_auth=self)
 
     def sign_in(self):
-        assert not self.debug
         header = jwt.get_unverified_header(request.data)
         with self.lock:
             self.refresh_keys()

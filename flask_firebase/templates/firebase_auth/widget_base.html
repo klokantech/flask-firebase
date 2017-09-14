@@ -8,6 +8,7 @@
 {% block scripts %}{% endblock %}
 <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/2.3.0/firebaseui.css" />
 {% block styles %}{% endblock %}
+{% if firebase_auth.api_key %}
 <script>
 firebase.initializeApp({
   apiKey: "{{ firebase_auth.api_key }}",
@@ -38,10 +39,18 @@ ui.start("#firebaseui-auth-container", {
   }
 });
 </script>
+{% endif %}
 </head>
 <body>
 {% block header %}{% endblock %}
 <div id="firebaseui-auth-container"></div>
+{% if firebase_auth.debug %}
+<h3>Development sign-in</h3>
+<form action="" method="POST">
+  Email: <input type="text" name="email" />
+  <input type="submit" value="Sign in" />
+</form>
+{% endif %}
 {# TODO: Default text explaining that you sign up by signing in. #}
 {% block footer %}{% endblock %}
 </body>
