@@ -23,7 +23,7 @@ ui.start("#firebaseui-auth-container", {
   signInOptions: [ {{ firebase_auth.provider_ids }} ],
   callbacks: {
     signInSuccess: function(user, credential, redirectUrl) {
-      user.getToken().then(function(token) {
+      user.getIdToken().then(function(token) {
         var xhr = new XMLHttpRequest();
         xhr.open("POST", "{{ firebase_auth.url_for('sign_in') }}", true);
         xhr.setRequestHeader("Content-Type", "application/jwt");
