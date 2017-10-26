@@ -46,7 +46,6 @@ class FirebaseAuth:
         self.api_key = None
         self.project_id = None
         self.provider_ids = None
-        self.server_name = None
         self.production_load_callback = None
         self.development_load_callback = None
         self.unload_callback = None
@@ -65,7 +64,6 @@ class FirebaseAuth:
         if self.api_key is None:
             return
         self.project_id = app.config['FIREBASE_PROJECT_ID']
-        self.server_name = app.config['SERVER_NAME']
         provider_ids = []
         for name in app.config['FIREBASE_AUTH_SIGN_IN_OPTIONS'].split(','):
             class_name = self.PROVIDER_CLASSES[name.strip()]
@@ -117,14 +115,13 @@ class FirebaseAuth:
         return redirect(self.verify_redirection())
 
     def verify_redirection(self):
-        next_ = request.args.get('next')
-        if not next_:
-            return request.url_root
-        if self.server_name:
-            url = urlparse(next_)
-            if not url.netloc.endswith(self.server_name):
+        next = request.args.get('next') or request.url_root
+        if not self.debug:
+            next_domain = urlparse(next).hostname.split('.')[-2:]
+            this_domain = urlparse(request.url).hostname.split('.')[-2:]
+            if next_domain != this_domain:
                 abort(400)
-        return next_
+        return next
 
     def refresh_keys(self):
         now = monotonic()
