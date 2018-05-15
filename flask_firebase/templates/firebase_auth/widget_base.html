@@ -12,7 +12,7 @@
 <script>
 firebase.initializeApp({
   apiKey: "{{ firebase_auth.api_key }}",
-  authDomain: "{{ firebase_auth.project_id }}.firebaseapp.com",
+  authDomain: "{{ firebase_auth.auth_domain }}",
   databaseURL: "https://{{ firebase_auth.project_id }}.firebaseio.com",
   storageBucket: "{{ firebase_auth.project_id }}.appspot.com",
   projectId: "{{ firebase_auth.project_id }}"
