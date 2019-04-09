@@ -68,7 +68,7 @@ def production_sign_in(token):
     db.session.commit()
 
 
-@app.development_loader
+@auth.development_loader
 def development_sign_in(email):
     login_user(Account.query.filter_by(email=email).one())
 
