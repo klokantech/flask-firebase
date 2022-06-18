@@ -64,6 +64,9 @@ class Account(UserMixin, db.Model):
     email_verified = db.Column(db.Boolean, default=False, nullable=False)
     name = db.Column(db.Text)
     photo_url = db.Column(db.Text)
+    
+    def get_id(self):
+        return self.firebase_user_id
 
     def __repr__(self):
         return str(dict(firebase_user_id=self.firebase_user_id, email=self.email, name=self.name))
