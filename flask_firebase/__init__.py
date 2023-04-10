@@ -105,13 +105,16 @@ class FirebaseAuth:
         with self.lock:
             self.refresh_keys()
             key = self.keys[header['kid']]
-        token = jwt.decode(
-            request.data,
-            key=key,
-            audience=self.project_id,
-            algorithms=['RS256'])
-        self.production_load_callback(token)
-        return 'OK'
+        try:
+            token = jwt.decode(
+                request.data,
+                key=key,
+                audience=self.project_id,
+                algorithms=['RS256'])
+            self.production_load_callback(token)
+            return 'OK'
+        except jwt.exceptions.ExpiredSignatureError as e:
+            abort(401, 'jwt signature expired')
 
     def sign_out(self):
         self.unload_callback()
