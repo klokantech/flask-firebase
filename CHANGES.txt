@@ -1,3 +1,4 @@
+v1.8, 2023-04-10 -- Handle expired jwt token
 v1.7, 2018-05-15 -- Allow setting of auth domain.
 v1.6, 2017-10-26 -- Only verify last two domain levels on redirect.
 v1.5, 2017-09-15 -- Use Firebase User.getIdToken().

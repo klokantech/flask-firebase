@@ -21,6 +21,7 @@ var ui = new firebaseui.auth.AuthUI(firebase.auth());
 ui.start("#firebaseui-auth-container", {
   queryParameterForSignInSuccessUrl: "next",
   signInOptions: [ {{ firebase_auth.provider_ids }} ],
+  signInFlow: 'popup',
   callbacks: {
     signInSuccess: function(user, credential, redirectUrl) {
       user.getIdToken().then(function(token) {
